@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres # insert your own configuration, should you want to use docker
+      - POSTGRES_PASSWORD=123123
+      - POSTGRES_DB=gin
+    ports:
+      - '5432:5432'
+    volumes:
+      - /var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
