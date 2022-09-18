@@ -6,7 +6,9 @@ import (
 	"github.com/DustinDust/gin-blog-post/db"
 )
 
-var UserService *UserModel
+var UserRepository *UserModel
+var BlogPostRepository *BlogPostModel
+var TagRepository *TagModel
 
 func InitModel() error {
 	if db.DB == nil {
@@ -16,6 +18,8 @@ func InitModel() error {
 	if err != nil {
 		return err
 	}
-	UserService = &UserModel{}
+	UserRepository = &UserModel{}
+	BlogPostRepository = &BlogPostModel{}
+	TagRepository = &TagModel{}
 	return nil
 }

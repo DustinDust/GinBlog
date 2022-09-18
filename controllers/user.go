@@ -30,7 +30,7 @@ func (u *UserControllerInterface) FindById(c *gin.Context) {
 		})
 		return
 	}
-	res, user := models.UserService.FindById(id)
+	res, user := models.UserRepository.FindById(id)
 	if res.Error != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 			Success: false,
@@ -59,7 +59,7 @@ func (u *UserControllerInterface) Create(c *gin.Context) {
 		Username: createDto.Username,
 		Password: createDto.Password,
 	}
-	res, user := models.UserService.Create(user)
+	res, user := models.UserRepository.Create(user)
 	if res.Error != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 			Success: false,
@@ -97,7 +97,7 @@ func (u *UserControllerInterface) Update(c *gin.Context) {
 		Username: updateDto.Username,
 		Password: updateDto.Password,
 	}
-	res := models.UserService.Update(id, user)
+	res := models.UserRepository.Update(id, user)
 	if res.Error != nil {
 		log.Printf("Error: %v", res.Error.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
@@ -126,7 +126,7 @@ func (u *UserControllerInterface) Delete(c *gin.Context) {
 		})
 		return
 	}
-	res := models.UserService.Delete(id)
+	res := models.UserRepository.Delete(id)
 	if res.Error != nil {
 		if res.Error != nil {
 			log.Printf("Error: %v", res.Error.Error())
