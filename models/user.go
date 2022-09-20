@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Username     string `json:"username"`
+	Username     string `json:"username" gorm:"unique"`
 	Password     string `json:"-"`
 	RefreshToken string `json:"-"`
 }
@@ -23,6 +23,12 @@ func (u *UserModel) FindAll(query map[string]interface{}) (*gorm.DB, []User) {
 func (u *UserModel) FindById(id int) (*gorm.DB, User) {
 	user := User{}
 	res := db.DB.First(&user, id)
+	return res, user
+}
+
+func (u *UserModel) FindByUsername(username string) (*gorm.DB, User) {
+	user := User{}
+	res := db.DB.Model(&user).First(&user, "username=?", username)
 	return res, user
 }
 

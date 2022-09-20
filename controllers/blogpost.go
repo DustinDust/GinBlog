@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type BlogPostControllerInterface struct{}
+type blogPostController struct{}
 
 type CreateBlogPostDto struct {
 	Title   string       `json:"title" binding:"required"`
@@ -22,7 +22,7 @@ type UpdateBlogPostDto struct {
 	Tags    []models.Tag `json:"tags,omitempty"`
 }
 
-func (b *BlogPostControllerInterface) FindAll(c *gin.Context) {
+func (b *blogPostController) FindAll(c *gin.Context) {
 	query := make(map[string]interface{})
 	urlQueries := c.Request.URL.Query()
 
@@ -46,7 +46,7 @@ func (b *BlogPostControllerInterface) FindAll(c *gin.Context) {
 	})
 }
 
-func (b *BlogPostControllerInterface) FindById(c *gin.Context) {
+func (b *blogPostController) FindById(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -71,7 +71,7 @@ func (b *BlogPostControllerInterface) FindById(c *gin.Context) {
 	})
 }
 
-func (b *BlogPostControllerInterface) Create(c *gin.Context) {
+func (b *blogPostController) Create(c *gin.Context) {
 	createDto := CreateBlogPostDto{}
 	if err := c.ShouldBindJSON(&createDto); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, Response{
@@ -102,7 +102,7 @@ func (b *BlogPostControllerInterface) Create(c *gin.Context) {
 	})
 }
 
-func (b *BlogPostControllerInterface) Update(c *gin.Context) {
+func (b *blogPostController) Update(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -143,7 +143,7 @@ func (b *BlogPostControllerInterface) Update(c *gin.Context) {
 	})
 }
 
-func (b *BlogPostControllerInterface) Delete(c *gin.Context) {
+func (b *blogPostController) Delete(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {

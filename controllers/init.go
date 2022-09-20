@@ -1,17 +1,19 @@
 package controllers
 
-var UserController *UserControllerInterface
-var BlogPostController *BlogPostControllerInterface
-var TagController *TagControllerInterface
+var UserController *userController
+var BlogPostController *blogPostController
+var TagController *tagController
+var AuthController *authController
 
 type Response struct {
-	Success bool        `json:"success,omitempty"`
+	Success bool        `json:"success"`
 	Message string      `json:"message,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
 func InitController() {
-	UserController = &UserControllerInterface{}
-	BlogPostController = &BlogPostControllerInterface{}
-	TagController = &TagControllerInterface{}
+	UserController = &userController{}
+	BlogPostController = &blogPostController{}
+	TagController = &tagController{}
+	AuthController = &authController{}
 }

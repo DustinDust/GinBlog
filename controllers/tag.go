@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type TagControllerInterface struct{}
+type tagController struct{}
 
 type CreateTagDto struct {
 	Name string `json:"name" binding:"required"`
@@ -20,7 +20,7 @@ type UpdateTagDto struct {
 	Code string `json:"code,omitempty"`
 }
 
-func (t *TagControllerInterface) FindAll(c *gin.Context) {
+func (t *tagController) FindAll(c *gin.Context) {
 	query := make(map[string]interface{})
 	urlQueries := c.Request.URL.Query()
 
@@ -43,7 +43,7 @@ func (t *TagControllerInterface) FindAll(c *gin.Context) {
 	})
 }
 
-func (t *TagControllerInterface) FindById(c *gin.Context) {
+func (t *tagController) FindById(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -68,7 +68,7 @@ func (t *TagControllerInterface) FindById(c *gin.Context) {
 	})
 }
 
-func (t *TagControllerInterface) Create(c *gin.Context) {
+func (t *tagController) Create(c *gin.Context) {
 	createDto := CreateTagDto{}
 	if err := c.ShouldBindJSON(&createDto); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, Response{
@@ -96,7 +96,7 @@ func (t *TagControllerInterface) Create(c *gin.Context) {
 	})
 }
 
-func (t *TagControllerInterface) Update(c *gin.Context) {
+func (t *tagController) Update(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -135,7 +135,7 @@ func (t *TagControllerInterface) Update(c *gin.Context) {
 	})
 }
 
-func (t *TagControllerInterface) Delete(c *gin.Context) {
+func (t *tagController) Delete(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
