@@ -3,8 +3,7 @@ A Blog api written with gin &amp; gorm
 
 Quick start:
 1. Clone the repo with ```git clone https://github.com/DustinDust/GinBlog.git```
-2. Install dependencies with ```go mod download```
-3. Server on localhost:9090 using [`air`](https://github.com/cosmtrek/air) </br> 
+2. Server on localhost:9090 using [`air`](https://github.com/cosmtrek/air) </br> 
 \* If you don't have [air](https://github.com/cosmtrek/air) installed you can try `go run main.go`
 
 API Routes: <br/>
