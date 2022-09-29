@@ -26,12 +26,12 @@ func (b *blogPostController) FindAll(c *gin.Context) {
 	query := make(map[string]interface{})
 	urlQueries := c.Request.URL.Query()
 
-	// god bless go because i have to actually write this. When will the generic be adapted to stdlib :(
+	// god bless go because I have to actually write this. When will the generic be adapted to stdlib :(
 	for key, elem := range urlQueries {
 		query[key] = elem
 	}
 
-	res, blogPosts := models.BlogPostRepository.FindAll(query)
+	res, data := models.BlogPostRepository.FindAll(query)
 	if res.Error != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 			Success: false,
@@ -42,13 +42,13 @@ func (b *blogPostController) FindAll(c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
 		Success: true,
 		Message: "OK",
-		Data:    blogPosts,
+		Data:    data,
 	})
 }
 
 func (b *blogPostController) FindById(c *gin.Context) {
-	idstr := c.Param("id")
-	id, err := strconv.Atoi(idstr)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 			Success: false,
