@@ -14,9 +14,19 @@ type BlogPost struct {
 
 type BlogPostModel struct{}
 
-func (b *BlogPostModel) FindAll(query map[string]interface{}) (*gorm.DB, []BlogPost) {
-	blogPosts := []BlogPost{}
-	res := db.DB.Model(&BlogPost{}).Where(query).Preload("Tags").Find(&blogPosts)
+func (b *BlogPostModel) FindAll(query map[string]interface{}) (*gorm.DB, interface{}) {
+	var blogPosts []BlogPost
+	var res *gorm.DB
+
+	if page, ok := query["page"]; ok {
+		delete(query, "page")
+		pagination := Pagination[BlogPost]{}
+		res = db.DB.Scopes(Paginate[BlogPost](BlogPost{}, &pagination, page, PageSize)).Model(&BlogPost{}).Where(query).Preload("Tags").Find(&blogPosts)
+		pagination.Rows = blogPosts
+		db.DB.Model(&BlogPost{}).Count(&pagination.TotalRows)
+		return res, pagination
+	}
+	res = db.DB.Model(&BlogPost{}).Where(query).Preload("Tags").Find(&blogPosts)
 	return res, blogPosts
 }
 

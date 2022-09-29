@@ -50,7 +50,7 @@ func RefreshTokenRequiredMiddleWare() gin.HandlerFunc {
 		if user.RefreshToken != tokenString {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, controllers.Response{
 				Success: false,
-				Message: "Refresh token doens't match",
+				Message: "Refresh token doesn't match",
 			})
 			return
 		}
