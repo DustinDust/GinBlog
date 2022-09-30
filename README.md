@@ -5,7 +5,7 @@
 1. Clone the repo with ```git clone https://github.com/DustinDust/GinBlog.git``` <br/>
   1.1. Setup database (you can use the docker-compose file in the repo. <br />
   1.2. Setup `.env` for run time 
-2. Serve on localhost:9090 using [`air`](https://github.com/cosmtrek/air) </br> 
+2. Serve on localhost:9090 using [`air`](https://github.com/cosmtrek/air) <br /> 
   2.1 If you don't have [air](https://github.com/cosmtrek/air) installed you can try `go run main.go` <br />
   2.2 Make sure you have all the required packages installed. You can install or update with `go get -u <package-name>` 
 <br />
@@ -26,7 +26,7 @@
 8. &nbsp; `/v1/tag/:id` | `GET` : Fetch one Tag by `ID`
 9. &nbsp; `/v1/tag` | `POST` : Create new Tag (requires JSON body and bearer token)
 10. &nbsp; `/v1/tag/:id` | `PUT` : Update Tag by `ID` and `json body` (requires bearer token)
-11. &nbsp; `/v1/tag/:id` | `DELETE` : Delete token by `ID`
+11. &nbsp; `/v1/tag/:id` | `DELETE` : Delete tag by `ID`
 12. &nbsp; `/v1/auth/login` | `POST` : Login with username & password (requires JSON body)
 13. &nbsp; `/v1/auth/register` | `POST` : Register a new user account (requires JSON body)
 14. &nbsp; `/v1/auth/refresh` | `POST` : Refresh access token (requires refresh bearer token)
