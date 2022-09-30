@@ -18,6 +18,15 @@ type UpdateUserDto struct {
 	Password string `json:"password,omitempty"`
 }
 
+// Profile godoc
+// @Summary Get current user profile
+// @Description Base on userId extracted from jwt token, get user profile
+// @Tags user
+// @Accept json
+// @Produce json
+// @Success 200 {object} controllers.Response{data=models.User}
+// @Security ApiKeyuAuth
+// @Router /v1/user/me [get]
 func (u *userController) FindMe(c *gin.Context) {
 	id, ok := c.MustGet("userId").(int)
 	if !ok {

@@ -1,0 +1,583 @@
+basePath: /v1
+definitions:
+  controllers.Abr:
+    type: object
+  controllers.CreateBlogPostDto:
+    properties:
+      content:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      title:
+        type: string
+    required:
+    - content
+    - tags
+    - title
+    type: object
+  controllers.CreateTagDto:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  controllers.LoginDto:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controllers.UpdateBlogPostDto:
+    properties:
+      content:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      title:
+        type: string
+    type: object
+  controllers.UpdateTagDto:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.BlogPost:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.Pagination-models_BlogPost:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      rows:
+        items:
+          $ref: '#/definitions/models.BlogPost'
+        type: array
+      totalRows:
+        type: integer
+    type: object
+  models.Pagination-models_Tag:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      rows:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      totalRows:
+        type: integer
+    type: object
+  models.Tag:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Blogpost API written in Golang with Gin & Gorm
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Blogpost API
+  version: 1.0.0
+paths:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with username and password
+      parameters:
+      - description: Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                    type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      summary: Login
+      tags:
+      - auth
+  /v1/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                    type: object
+              type: object
+      security:
+      - ApiKeyuAuth: []
+      summary: Refresh access token
+      tags:
+      - auth
+  /v1/auth/resgiter:
+    post:
+      consumes:
+      - application/json
+      description: Register with username and password
+      parameters:
+      - description: Register
+        in: body
+        name: Register
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                    type: object
+              type: object
+      summary: Register
+      tags:
+      - auth
+  /v1/blog-post:
+    get:
+      description: Fetch all Blogpost based on query and paging
+      parameters:
+      - description: Which page to get
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Pagination-models_BlogPost'
+                  type: array
+              type: object
+      summary: Get All BlogPost
+      tags:
+      - blog-post
+    post:
+      consumes:
+      - application/json
+      description: Create Blogpost
+      parameters:
+      - description: Body of the blogpost to create
+        in: body
+        name: createDto
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateBlogPostDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BlogPost'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create Blogpost
+      tags:
+      - blog-post
+  /v1/blog-post/{id}:
+    delete:
+      description: Delete Blogpost by ID
+      parameters:
+      - description: Id of the blogpost to delete
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      rowAffected:
+                        type: integer
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Blogpost
+      tags:
+      - blog-post
+    get:
+      description: Fetch Blogpost based on ID
+      parameters:
+      - description: Id of the blogpost to fetch
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BlogPost'
+              type: object
+      summary: Get BlogPost By Id
+      tags:
+      - blog-post
+    put:
+      consumes:
+      - application/json
+      description: Update Blogpost
+      parameters:
+      - description: Body of the blogpost to update
+        in: body
+        name: updateDto
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateBlogPostDto'
+      - description: Id of the blogpost to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      rowsAffected:
+                        type: integer
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update Blogpost
+      tags:
+      - blog-post
+  /v1/tag:
+    get:
+      description: Get Tags with query and paging
+      parameters:
+      - description: page index
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Pagination-models_Tag'
+              type: object
+      summary: Get All Tags
+      tags:
+      - tag
+    post:
+      consumes:
+      - application/json
+      description: Create tag
+      parameters:
+      - description: Body of the tag to create
+        in: body
+        name: createDto
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateTagDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Tag'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create tag
+      tags:
+      - tag
+  /v1/tag/{id}:
+    delete:
+      description: Delete Tag by ID
+      parameters:
+      - description: Id of the tag to delete
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      rowAffected:
+                        type: integer
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Tag
+      tags:
+      - tag
+    get:
+      description: Fetch one Tag By Id
+      parameters:
+      - description: Id of the tag to fetch
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Tag'
+              type: object
+      summary: Get Tag By Id
+      tags:
+      - tag
+    post:
+      consumes:
+      - application/json
+      description: Update tag by Id
+      parameters:
+      - description: id of the tag to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Body of the tag to update
+        in: body
+        name: updateDto
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateTagDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/controllers.Abr'
+                  - properties:
+                      rowsAffected:
+                        type: integer
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update tag
+      tags:
+      - tag
+  /v1/user/me:
+    get:
+      consumes:
+      - application/json
+      description: Base on userId extracted from jwt token, get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+      security:
+      - ApiKeyuAuth: []
+      summary: Get current user profile
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

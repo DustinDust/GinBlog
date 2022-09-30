@@ -21,7 +21,7 @@ func (b *BlogPostModel) FindAll(query map[string]interface{}) (*gorm.DB, interfa
 	if page, ok := query["page"]; ok {
 		delete(query, "page")
 		pagination := Pagination[BlogPost]{}
-		res = db.DB.Scopes(Paginate[BlogPost](BlogPost{}, &pagination, page, PageSize)).Model(&BlogPost{}).Where(query).Preload("Tags").Find(&blogPosts)
+		res = db.DB.Scopes(Paginate(BlogPost{}, &pagination, page, PageSize)).Model(&BlogPost{}).Where(query).Preload("Tags").Find(&blogPosts)
 		pagination.Rows = blogPosts
 		db.DB.Model(&BlogPost{}).Count(&pagination.TotalRows)
 		return res, pagination

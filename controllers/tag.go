@@ -20,6 +20,14 @@ type UpdateTagDto struct {
 	Code string `json:"code,omitempty"`
 }
 
+// "Get All" godoc
+// @Summary Get All Tags
+// @Description Get Tags with query and paging
+// @Tags tag
+// @Produce json
+// @Param page query integer true "page index"
+// @Success 200 {object} controllers.Response{data=models.Pagination[models.Tag]}
+// @Router /v1/tag [get]
 func (t *tagController) FindAll(c *gin.Context) {
 	query := make(map[string]interface{})
 	urlQueries := c.Request.URL.Query()
@@ -43,6 +51,14 @@ func (t *tagController) FindAll(c *gin.Context) {
 	})
 }
 
+// "Get By Id" godoc
+// @Summary Get Tag By Id
+// @Description Fetch one Tag By Id
+// @Tags tag
+// @Produce json
+// @Param id path integer true "Id of the tag to fetch"
+// @Success 200 {object} controllers.Response{data=models.Tag}
+// @Router /v1/tag/{id} [get]
 func (t *tagController) FindById(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
@@ -68,6 +84,16 @@ func (t *tagController) FindById(c *gin.Context) {
 	})
 }
 
+// "Create" godoc
+// @Summary Create tag
+// @Description Create tag
+// @Tags tag
+// @Accept json
+// @Produce json
+// @Param createDto body controllers.CreateTagDto true "Body of the tag to create"
+// @Success 200 {object} controllers.Response{data=models.Tag}
+// @security ApiKeyAuth
+// @Router /v1/tag [post]
 func (t *tagController) Create(c *gin.Context) {
 	createDto := CreateTagDto{}
 	if err := c.ShouldBindJSON(&createDto); err != nil {
@@ -96,6 +122,17 @@ func (t *tagController) Create(c *gin.Context) {
 	})
 }
 
+// "Update" godoc
+// @Summary Update tag
+// @Description Update tag by Id
+// @Tags tag
+// @Accept json
+// @Produce json
+// @Param id path integer true "id of the tag to update"
+// @Param updateDto body controllers.UpdateTagDto true "Body of the tag to update"
+// @Success 200 {object} controllers.Response{data=controllers.Abr{rowsAffected=int}}
+// @security ApiKeyAuth
+// @Router /v1/tag/{id} [post]
 func (t *tagController) Update(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
@@ -135,6 +172,15 @@ func (t *tagController) Update(c *gin.Context) {
 	})
 }
 
+// "Delete" godoc
+// @Summary Delete Tag
+// @Description Delete Tag by ID
+// @Tags tag
+// @Produce json
+// @Param id path integer true "Id of the tag to delete"
+// @Success 200 {object} controllers.Response{data=controllers.Abr{rowAffected=int}}
+// @security ApiKeyAuth
+// @Router /v1/tag/{id} [delete]
 func (t *tagController) Delete(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)

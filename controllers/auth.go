@@ -22,6 +22,17 @@ func (a *authController) JwtTest(c *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary Login
+// @Description Login with username and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param        login body      controllers.LoginDto true  "Login"
+// @Success 200 {object} controllers.Response{data=controllers.Abr{accessToken=string,refreshToken=string}}
+// @Failure 401 {object} controllers.Response
+// @Failure 500 {object} controllers.Response
+// @Router /v1/auth/login [post]
 func (a *authController) Login(c *gin.Context) {
 	loginDto := &LoginDto{}
 	err := c.ShouldBindJSON(&loginDto)
@@ -34,9 +45,9 @@ func (a *authController) Login(c *gin.Context) {
 	}
 	res, user := models.UserRepository.FindByUsername(loginDto.Username)
 	if res.Error != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, Response{
+		c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 			Success: false,
-			Message: err.Error(),
+			Message: res.Error.Error(),
 		})
 		return
 	}
@@ -47,7 +58,6 @@ func (a *authController) Login(c *gin.Context) {
 		refreshToken, err2 := services.JwtService.GenerateRefreshJwt(services.JwtClaims{
 			UserId: int(user.ID),
 		})
-		models.UserRepository.Update(int(user.ID), models.User{RefreshToken: refreshToken})
 		if err1 != nil || err2 != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, Response{
 				Success: false,
@@ -55,6 +65,7 @@ func (a *authController) Login(c *gin.Context) {
 			})
 			return
 		}
+		models.UserRepository.Update(int(user.ID), models.User{RefreshToken: refreshToken})
 		c.JSON(http.StatusOK, Response{
 			Success: true,
 			Message: "OK",
@@ -73,6 +84,15 @@ func (a *authController) Login(c *gin.Context) {
 	}
 }
 
+// Register godoc
+// @Summary Register
+// @Description Register with username and password
+// @Tags auth
+// @Param Register body controllers.LoginDto true "Register"
+// @Accept json
+// @Produce json
+// @Success 200 {object} controllers.Response{data=controllers.Abr{accessToken=string,refreshToken=string}}
+// @Router /v1/auth/resgiter [post]
 func (a *authController) Register(c *gin.Context) {
 	loginDto := LoginDto{}
 	err := c.ShouldBindJSON(&loginDto)
@@ -101,6 +121,15 @@ func (a *authController) Register(c *gin.Context) {
 	})
 }
 
+// Refresh godoc
+// @Summary Refresh access token
+// @Description Refresh access token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} controllers.Response{data=controllers.Abr{accessToken=string,refreshToken=string}}
+// @Security ApiKeyuAuth
+// @Router /v1/auth/refresh [post]
 func (a *authController) Refresh(c *gin.Context) {
 	userId, ok := c.MustGet("userId").(int)
 	if !ok {
