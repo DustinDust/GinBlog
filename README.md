@@ -6,8 +6,8 @@
   1.1. Setup database (you can use the docker-compose file in the repo. <br />
   1.2. Setup `.env` for run time 
 2. Serve on localhost:9090 using [`air`](https://github.com/cosmtrek/air) <br /> 
-  2.1 If you don't have [air](https://github.com/cosmtrek/air) installed you can try `go run main.go` <br />
-  2.2 Make sure you have all the required packages installed. You can install or update with `go get -u <package-name>` 
+  2.1 If you don't have [air](https://github.com/cosmtrek/air) installed you can try <br/>```go run main.go``` <br />
+  2.2 Make sure you have all the required packages installed. You can install or update with &nbsp;<br/>```go get -u <package-name>``` 
 <br />
 <br />
 <br />
@@ -32,6 +32,16 @@
 14. &nbsp; `/v1/auth/refresh` | `POST` : Refresh access token (requires refresh bearer token)
 <br />
 <br />
+
+### Swagger API
+Swagger docs can be found here:&nbsp; <br/>`/swagger/index.html` or full path &nbsp; <br/>`http://localhost:9090/swagger/index.html` 
+You can modify the Declarative Comments which can be found in the source code and run &nbsp; <br />```swag init --pd``` to make modification to the swagger docs. 
+<br />
+<br />
+For more information about swagger for go, check out [swaggo/swag](https://github.com/swaggo/swag) and [swaggo/gin-swagger](https://github.com/swaggo/gin-swagger)
+
+<br/>
+<br/>
 
 ## Todo:
 * Write testcases
