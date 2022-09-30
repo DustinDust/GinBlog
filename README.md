@@ -2,16 +2,18 @@
 ## A Blog api written with gin &amp; gorm
 
 ### Quick start:
-1. Clone the repo with ```git clone https://github.com/DustinDust/GinBlog.git```
-1.1. Setup database (you can use the docker-compose file in the repo)
-<br />
-1.2. Setup `.env` for run time
+1. Clone the repo with ```git clone https://github.com/DustinDust/GinBlog.git``` <br/>
+  1.1. Setup database (you can use the docker-compose file in the repo. <br />
+  1.2. Setup `.env` for run time 
 2. Serve on localhost:9090 using [`air`](https://github.com/cosmtrek/air) </br> 
-\* If you don't have [air](https://github.com/cosmtrek/air) installed you can try `go run main.go`
+  2.1 If you don't have [air](https://github.com/cosmtrek/air) installed you can try `go run main.go` <br />
+  2.2 Make sure you have all the required packages installed. You can install or update with `go get -u <package-name>` 
 <br />
-\* Make sure you have all the required packages installed. You can install or update with `go get -u <package-name>` 
+<br />
+<br />
 
-### API Routes: <br/>
+### API Routes: 
+<br/>
 
 1. &nbsp; `/v1/user/me` | `GET` : Fetch current user (requires bearer token)
 2. &nbsp; `/v1/blog-post?page=<int>` | `GET` : Fetch all blogposts (additional query support)
