@@ -20,7 +20,7 @@ func (t *TagModel) FindAll(query map[string]interface{}) (*gorm.DB, interface{})
 	if page, ok := query["page"]; ok {
 		delete(query, "page")
 		pagination := Pagination[Tag]{}
-		res = db.DB.Scopes(Paginate[Tag](Tag{}, &pagination, page, PageSize)).Model(&Tag{}).Where(query).Find(&tags)
+		res = db.DB.Scopes(Paginate(Tag{}, &pagination, page, PageSize)).Model(&Tag{}).Where(query).Find(&tags)
 		pagination.Rows = tags
 		db.DB.Model(&Tag{}).Count(&pagination.TotalRows)
 		return res, pagination
