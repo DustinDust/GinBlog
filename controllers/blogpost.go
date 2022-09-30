@@ -22,6 +22,14 @@ type UpdateBlogPostDto struct {
 	Tags    []models.Tag `json:"tags,omitempty"`
 }
 
+// "Get All" godoc
+// @Summary Get All BlogPost
+// @Description Fetch all Blogpost based on query and paging
+// @Tags blog-post
+// @Produce json
+// @Param page query integer true "Which page to get"
+// @Success 200 {object} controllers.Response{data=[]models.Pagination[models.BlogPost]}
+// @Router /v1/blog-post [get]
 func (b *blogPostController) FindAll(c *gin.Context) {
 	query := make(map[string]interface{})
 	urlQueries := c.Request.URL.Query()
@@ -46,6 +54,14 @@ func (b *blogPostController) FindAll(c *gin.Context) {
 	})
 }
 
+// "Get By Id" godoc
+// @Summary Get BlogPost By Id
+// @Description Fetch Blogpost based on ID
+// @Tags blog-post
+// @Produce json
+// @Param id path integer true "Id of the blogpost to fetch"
+// @Success 200 {object} controllers.Response{data=models.BlogPost}
+// @Router /v1/blog-post/{id} [get]
 func (b *blogPostController) FindById(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -71,6 +87,16 @@ func (b *blogPostController) FindById(c *gin.Context) {
 	})
 }
 
+// "Create" godoc
+// @Summary Create Blogpost
+// @Description Create Blogpost
+// @Tags blog-post
+// @Accept json
+// @Produce json
+// @Param createDto body controllers.CreateBlogPostDto true "Body of the blogpost to create"
+// @Success 200 {object} controllers.Response{data=models.BlogPost}
+// @Security  ApiKeyAuth
+// @Router /v1/blog-post [post]
 func (b *blogPostController) Create(c *gin.Context) {
 	createDto := CreateBlogPostDto{}
 	if err := c.ShouldBindJSON(&createDto); err != nil {
@@ -102,6 +128,17 @@ func (b *blogPostController) Create(c *gin.Context) {
 	})
 }
 
+// "Update" godoc
+// @Summary Update Blogpost
+// @Description Update Blogpost
+// @Tags blog-post
+// @Accept json
+// @Produce json
+// @Param updateDto body controllers.UpdateBlogPostDto true "Body of the blogpost to update"
+// @Param id path integer true "Id of the blogpost to update"
+// @Success 200 {object} controllers.Response{data=controllers.Abr{rowsAffected=int}}
+// @Router /v1/blog-post/{id} [put]
+// @Security ApiKeyAuth
 func (b *blogPostController) Update(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
@@ -143,6 +180,15 @@ func (b *blogPostController) Update(c *gin.Context) {
 	})
 }
 
+// "Delete" godoc
+// @Summary Delete Blogpost
+// @Description Delete Blogpost by ID
+// @Tags blog-post
+// @Produce json
+// @Param id path integer true "Id of the blogpost to delete"
+// @Success 200 {object} controllers.Response{data=controllers.Abr{rowAffected=int}}
+// @security ApiKeyAuth
+// @Router /v1/blog-post/{id} [delete]
 func (b *blogPostController) Delete(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)

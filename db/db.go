@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"gorm.io/gorm/logger"
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -21,7 +20,7 @@ func InitDB() error {
 	port := os.Getenv("DB_PORT")
 	connString := fmt.Sprintf(format, host, user, password, name, port)
 	db, err := gorm.Open(postgres.Open(connString), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		// Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		return err
